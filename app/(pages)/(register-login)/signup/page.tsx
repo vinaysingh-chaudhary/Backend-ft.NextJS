@@ -1,5 +1,8 @@
 "use client"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 
 interface FormData {
@@ -11,6 +14,8 @@ interface FormData {
 }
 
 export default function Page() {
+  const router = useRouter();
+
   const [formData, setFormData] = useState<FormData>({
     username: '',
     fullName: '',
@@ -19,36 +24,54 @@ export default function Page() {
     password: '',
   });
 
+  const [loading, setLoading] = useState(false);
+
+  const [disabled, setDisabled] = useState(true); 
+  useEffect(() => {
+    const isFilled = Object.values(formData).every(value => value !== '');
+    const isPasswordValid = formData.password.trim().split('').length > 6;
+    
+   setDisabled(!isFilled || !isPasswordValid)
+  },[formData])
+
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: value ,
     }));
   };
 
+
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    console.log(formData);
+    register();
   };
 
-  // const register = async() => {
-  //   const registerRefrence = await fetch("/api/users/signup", 
-  //     {
-  //       method: "POST",
-  //       headers: {
-  //         "content-type": "application/json"
-  //       },
-  //       body: JSON.stringify(formData) 
-  //     }); 
+  const register = async() => {
+    try {
 
-  //     console.log(registerRefrence); 
-  // }; 
+      setLoading(true);
+      const {data} = await axios.post("/api/users/signup", formData); 
+      setLoading(false);
+      console.log(data); 
+      router.push("/login");
+
+    } catch (error: any) {
+      console.log(error.messsage)
+    }
+  }; 
 
 
   return (
     <div className="min-h-screen bg-black flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-orange-200">Sign up for an account</h2>
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-white">Sign up for an account</h2>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md ">
@@ -136,6 +159,7 @@ export default function Page() {
                   name="password"
                   type="password"
                   autoComplete="current-password"
+                  placeholder='Password must be 7 characters'
                   required
                   value={formData.password}
                   onChange={handleChange}
@@ -147,11 +171,17 @@ export default function Page() {
             <div>
               <button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-300 hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-700"
+                disabled={disabled}
+                className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${disabled? "bg-green-300" : "bg-green-400"} hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-700`}
               >
-                Sign up
+                {loading === true ? "Loading" : "SignUp"}
               </button>
             </div>
+
+            <div className='flex justify-center items-center text-white'>
+              <Link href={"/login"}>  Already a user ? Log In</Link>
+            </div>
+
           </form>
         </div>
       </div>
