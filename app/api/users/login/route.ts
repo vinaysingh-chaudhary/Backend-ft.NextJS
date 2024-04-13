@@ -46,7 +46,7 @@ export const POST= async(request: NextRequest, response: NextResponse ) => {
             { status:200 }
             );
 
-        response.cookies.set("token", generateAccessToken, cookieOptioins );
+        response.cookies.set("accessToken", generateAccessToken, cookieOptioins );
         
         return response;
 
