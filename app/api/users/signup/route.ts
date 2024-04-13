@@ -3,18 +3,18 @@ import User from "@/models/user.model";
 import bcryptjs from 'bcryptjs'; 
 import sendTokenMail from "@/utilities/mailer";
 import { NextResponse, NextRequest } from "next/server";
+import { error } from "console";
 
 
 dbConnect(); 
-
-
 export const POST = async(request : NextRequest, response: NextResponse) => {
     try {
+
         const { username, fullName, bio, email, password } = await request.json(); 
 
         if(!username && !email && !password && !fullName)
-            console.log("Provide username, full name , email and password correctly"); 
- 
+            return NextResponse.json({error: "Provide username, full name , email and password correctly"}, {status:401});
+        
         const existingUser = await User.findOne({email}); 
         if(existingUser)
             return NextResponse.json({error : "User already exists"}, {status: 400}); 
@@ -37,7 +37,6 @@ export const POST = async(request : NextRequest, response: NextResponse) => {
         await sendTokenMail({email, emailType : "VERIFY", userId: registerUser._id }); 
 
         return NextResponse.json({
-            status: 200,
             success: true, 
             messaget : "User registered successfully",
             userDetails : {
@@ -47,9 +46,12 @@ export const POST = async(request : NextRequest, response: NextResponse) => {
                 bio: registerUser?.bio,
                 isVerified: registerUser?.isVerified
             }, 
-        })
+        },
+        {
+             status: 200
+        });
 
-    } catch (error) {
-        return NextResponse.json({error : error}, {status: 500});
+    } catch (error: any) {
+        return NextResponse.json({error : error.message}, {status: 500});
     }
 }; 
