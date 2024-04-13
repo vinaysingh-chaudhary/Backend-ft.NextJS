@@ -44,7 +44,7 @@ const sendTokenMail = async({email, emailType, userId} : SendTokenMailParams) =>
             from: 'oiiashwry@gmail.com', 
             to: email, 
             subject: emailType === "VERIFY" ? "Verify your email" : "Reset your password",
-            html: `<p>Please click <a href="${process.env.DOMAIN}/${emailType==="VERIFY" ? "verifyemail" : "reset-password"}?token=${generatedToken}">here</a> to ${emailType === "VERIFY" ? "verify  your email address." : "reset your password."} or copy and paste the link below in your browser. <br> ${process.env.DOMAIN}/${emailType==="VERIFY" ? "verifyemail" : "reset-password"}?token=${generatedToken} </p>`, 
+            html: `<p>Please click <a href="${process.env.DOMAIN}/${emailType==="VERIFY" ? "verifymail" : "reset-password"}?token=${generatedToken}">here</a> to ${emailType === "VERIFY" ? "verify  your email address." : "reset your password."} or copy and paste the link below in your browser. <br> ${process.env.DOMAIN}/${emailType==="VERIFY" ? "verifymail" : "reset-password"}?token=${generatedToken} </p>`, 
           });
 
           return sentMailResponse; 
