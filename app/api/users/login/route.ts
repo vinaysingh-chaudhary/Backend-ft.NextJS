@@ -21,7 +21,7 @@ export const POST= async(request: NextRequest, response: NextResponse ) => {
     
         const isPasswordCorrect = await bcryptjs.compare(password, user.password); 
         if(!isPasswordCorrect)
-               return NextResponse.json({error: "Password is incorrect"}, {status: 200});
+               return NextResponse.json({error: "Password is incorrect"}, {status: 500});
     
         
         const generateAccessToken = jwt.sign(

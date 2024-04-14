@@ -18,7 +18,7 @@ export const POST = async(request: NextRequest, response: NextResponse) => {
         )
     
         if(!user)
-            return NextResponse.json({error: "Either verification code is expired or User doesn't exists"}, {status: 500}); 
+            return NextResponse.json({error: "Verification code is expired"}, {status: 500}); 
     
         const updatedUserRefrence = await User.findByIdAndUpdate(
             user?._id,

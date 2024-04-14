@@ -1,12 +1,9 @@
 import dbConnect from "@/database/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
-import jwt from 'jsonwebtoken';
-import { cookieOptioins } from "@/Static/cookieOptions";
-
 
 dbConnect(); 
 export const POST = async(request: NextRequest, response: NextResponse) => {
-    try {
+    try { 
         const response = NextResponse.json(
             {
                 success: true, 
