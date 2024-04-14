@@ -18,7 +18,9 @@ export default function Page() {
   });
 
   const [loading, setLoading] = useState(false)
+  const [errorMessage, setError] = useState("");
 
+  
   const [disabled, setDisabled] = useState(true); 
   useEffect(() => {
     const isFilled = Object.values(formData).every(value => value !== '');
@@ -37,14 +39,20 @@ export default function Page() {
 
   const loginUser = async() => {
     try {
+
+      setError("")
       setLoading(true);
       const {data} = await axios.post("/api/users/login", formData);
       setLoading(false); 
       console.log(data); 
-      router.push("/profile");
+
+      if(data?.success){
+         router.push("/profile");
+      }
 
     } catch (error:any) {
-      console.log(error.messsage)
+     setError(error.response.data.error)
+     setLoading(false); 
     }
   }
 
@@ -116,6 +124,9 @@ export default function Page() {
                 Sign up
               </button>
             </div>
+
+            {errorMessage !== "" && <h1 className='text-sm text-red-500 flex justify-center items-center'>{errorMessage}</h1>}
+
           </form>
         </div>
       </div>

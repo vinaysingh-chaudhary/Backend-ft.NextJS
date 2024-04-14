@@ -25,6 +25,7 @@ export default function Page() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setError] = useState();
 
   const [disabled, setDisabled] = useState(true); 
   useEffect(() => {
@@ -60,10 +61,13 @@ export default function Page() {
       const {data} = await axios.post("/api/users/signup", formData); 
       setLoading(false);
       console.log(data); 
-      router.push("/login");
+      
+      if(data?.success){
+        router.push("/login");
+      }
 
     } catch (error: any) {
-      console.log(error.messsage)
+      setError(error.response.data.error);
     }
   }; 
 
@@ -182,6 +186,7 @@ export default function Page() {
               <Link href={"/login"}>  Already a user ? Log In</Link>
             </div>
 
+            {errorMessage && <h1 className='text-sm text-red-500 py-3 flex justify-center items-center'>{errorMessage}</h1>}
           </form>
         </div>
       </div>
