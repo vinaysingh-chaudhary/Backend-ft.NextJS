@@ -8,7 +8,7 @@ export const POST = async(request: NextRequest, response: NextResponse) => {
     
         const { token } = await request.json(); 
         if(!token)
-            return NextResponse.json({error: "token isn't available"}, {status: 200}); 
+            return NextResponse.json({error: "token isn't available"}, {status: 500}); 
     
         const user = await User.findOne(
             {
