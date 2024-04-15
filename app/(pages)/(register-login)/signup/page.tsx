@@ -25,7 +25,7 @@ export default function Page() {
   });
 
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setError] = useState();
+  const [errorMessage, setError] = useState("");
 
   const [disabled, setDisabled] = useState(true); 
   useEffect(() => {
@@ -57,6 +57,7 @@ export default function Page() {
   const register = async() => {
     try {
 
+      setError("");
       setLoading(true);
       const {data} = await axios.post("/api/users/signup", formData); 
       setLoading(false);

@@ -1,16 +1,17 @@
 "use client"
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function Page() {
   
+  const router = useRouter()
   const [loading, setLoading] = useState(false);  
   const [errorMessage, setError] = useState(""); 
   const [token, setToken] = useState();
   const [successFlag, setSuccessFlag] = useState(false)
 
 
-  
   useEffect(() => { 
    const token : any =  window.location.search.split("=")[1]
    setToken(token);
@@ -27,6 +28,7 @@ export default function Page() {
       
       if(data?.success){
         setSuccessFlag(true);
+        router.push("/profile")
       }
       setLoading(false);
       console.log(data);
@@ -38,7 +40,7 @@ export default function Page() {
 
   };
 
-
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-black">
       <div className="max-w-md w-full p-6 bg-[#3e3e3e74] rounded-lg shadow-lg text-white">

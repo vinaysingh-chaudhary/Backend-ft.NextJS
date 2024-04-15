@@ -2,6 +2,7 @@
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 interface FormData {
   email: string;
@@ -127,6 +128,12 @@ export default function Page() {
 
             {errorMessage !== "" && <h1 className='text-sm text-red-500 flex justify-center items-center'>{errorMessage}</h1>}
 
+            <p>
+              <Link href={"/signup"} className='text-green-400 hover:text-green-700 cursor-pointer flex justify-center items-center'>
+                create a new account
+              </Link>
+            </p>
+            
           </form>
         </div>
       </div>
